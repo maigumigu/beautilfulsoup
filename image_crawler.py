@@ -3,6 +3,8 @@ import requests
 import urllib.request
 import time
 import re
+import os
+
 textf = open("linksource.txt")
 
 while True:
@@ -25,8 +27,16 @@ while True:
         print(image_tag.get('src'))
         source_list.append(image_tag.get('src'))
 
+    # Create target directory if don't exist
+    if not os.path.exists("images"):
+        os.mkdir("images")
+        print("Directory: images/ created ")
+    else:    
+        print("Directory: images/ already exists")
+    
     # download image
     for source in source_list:
-        file_name= re.sub("[^A-Za-z0-9]*","",source)
+        file_name= re.sub("[^A-Za-z0-9]*","",source) # remove non alphabetical and non numeric character
+        file_name = file_name[4:] # remove http string
         urllib.request.urlretrieve(source, 'images/'+file_name+'.jpg')
     
